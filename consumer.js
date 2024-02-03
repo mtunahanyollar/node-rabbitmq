@@ -7,7 +7,7 @@ connect_rabbitmq();
 
 async function connect_rabbitmq(){
     try{
-        const connection = await amqp.connect("amqp://localhost:5672");
+        const connection = await amqp.connect("amqp://localhost:5673");
         const channel = await connection.createChannel();
         const assertion = await channel.assertQueue(queueName);
     
