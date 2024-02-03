@@ -1,9 +1,13 @@
 const amqp = require("amqplib")
 
 const message = {
-    description : "Test message GG"
+    description : "This is a test message."
 }
+
+const data = require("./data.json");
 const queueName = process.argv[2] || "jobsQueue";
+
+
 connect_rabbitmq();
 
 async function connect_rabbitmq(){
@@ -12,11 +16,20 @@ async function connect_rabbitmq(){
         const channel = await connection.createChannel();
         const assertion = await channel.assertQueue(queueName);
     
-        setInterval(() => {
-            message.description = new Date().getSeconds();
+        data.forEach(element => {
+            message.description = element.id;
             channel.sendToQueue(queueName,Buffer.from(JSON.stringify(message)));
-            console.log("Message has sent", message);
-        },1);
+            console.log("Message has sent", element.id);
+        });
+        
+
+        // == I N T E R V A L == //
+        // setInterval(() => {
+        //     message.description = new Date().getSeconds();
+        //     channel.sendToQueue(queueName,Buffer.from(JSON.stringify(message)));
+        //     console.log("Message has sent", message);
+        // },1);
+        // == I N T E R V A L == //
     }
     catch(error){
         console.log("Error", error)
